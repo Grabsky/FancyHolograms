@@ -7,7 +7,7 @@ plugins {
 }
 
 group = "de.oliver"
-version = "1.0.7"
+version = "1.1.0"
 description = "Hologram plugin"
 
 java {
@@ -22,7 +22,7 @@ repositories {
 }
 
 dependencies {
-    paperweight.paperDevBundle("1.19.4-R0.1-SNAPSHOT")
+    paperweight.paperDevBundle("1.20-R0.1-SNAPSHOT")
 
     implementation("de.oliver:FancyLib:1.0.2")
     compileOnly("de.oliver:FancyNpcs:1.1.5")

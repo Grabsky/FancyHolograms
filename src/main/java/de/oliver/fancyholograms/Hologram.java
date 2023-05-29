@@ -22,7 +22,7 @@ import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_19_R3.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R0.CraftWorld;
 import org.bukkit.entity.Player;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
