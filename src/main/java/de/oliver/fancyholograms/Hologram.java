@@ -22,7 +22,7 @@ import net.minecraft.world.entity.Display;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_20_R0.CraftWorld;
+import org.bukkit.craftbukkit.v1_20_R1.CraftWorld;
 import org.bukkit.entity.Player;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
@@ -78,7 +78,7 @@ public class Hologram {
     }
 
     public void spawn(ServerPlayer serverPlayer){
-        if(!location.getWorld().getName().equalsIgnoreCase(serverPlayer.getLevel().getWorld().getName())){
+        if(!location.getWorld().getName().equalsIgnoreCase(serverPlayer.level().getWorld().getName())){
             return;
         }
 
