@@ -19,6 +19,7 @@ import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Display;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import org.bukkit.Location;
@@ -123,7 +124,7 @@ public class Hologram {
     }
 
     public void updateLocation(ServerPlayer serverPlayer){
-        entity.level = ((CraftWorld) location.getWorld()).getHandle();
+        // TODO: switch world if needed
         entity.setPosRaw(location.x(), location.y(), location.z());
         entity.setYRot(location.getYaw());
 
