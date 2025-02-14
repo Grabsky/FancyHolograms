@@ -30,10 +30,11 @@ public final class PlayerListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     public void onJoin(@NotNull final PlayerJoinEvent event) {
+        plugin.getLogger().info("[RP-DEBUG] [" + event.getPlayer().getName() + "] Player has joined the server... Updating shown state for all holograms...");
         for (final var hologram : this.plugin.getHologramsManager().getHolograms()) {
             hologram.updateShownStateFor(event.getPlayer());
         }
-
+        plugin.getLogger().info("[RP-DEBUG] Done!");
         if (!this.plugin.getHologramConfiguration().areVersionNotificationsMuted() && event.getPlayer().hasPermission("fancyholograms.admin")) {
             FancyHolograms.get().getHologramThread().submit(() -> FancyHolograms.get().getVersionConfig().checkVersionAndDisplay(event.getPlayer(), true));
         }
@@ -66,24 +67,32 @@ public final class PlayerListener implements Listener {
     public void onResourcePackStatus(@NotNull final PlayerResourcePackStatusEvent event) {
         // Skipping event calls before player has fully loaded to the server.
         // This should fix NPE due to vanillaPlayer.connection being null when sending resource-packs in the configuration stage.
-        if (!event.getPlayer().isOnline())
+        if (!event.getPlayer().isOnline()) {
+            plugin.getLogger().info("[RP-DEBUG] [" + event.getPlayer().getName() + "] PlayerResourcePackStatusEvent called while player is offline. Configuration stage?");
             return;
+        }
         final UUID playerUniqueId = event.getPlayer().getUniqueId();
         final UUID packUniqueId = getResourcePackID(event);
         // Adding accepted resource-pack to the list of currently loading resource-packs for that player.
-        if (event.getStatus() == Status.ACCEPTED)
+        if (event.getStatus() == Status.ACCEPTED) {
+            plugin.getLogger().info("[RP-DEBUG] [" + event.getPlayer().getName() + "] Player accepted a pack identified by " + packUniqueId);
             loadingResourcePacks.computeIfAbsent(playerUniqueId, (___) -> new ArrayList<>()).add(packUniqueId);
+        }
         // Once successfully loaded (or failed to download), removing resource-pack from the map.
         else if (event.getStatus() == Status.SUCCESSFULLY_LOADED || event.getStatus() == Status.FAILED_DOWNLOAD) {
+            plugin.getLogger().info("[RP-DEBUG] [" + event.getPlayer().getName() + "] Status update for pack " + packUniqueId + ": " + event.getStatus());
             loadingResourcePacks.computeIfAbsent(playerUniqueId, (___) -> new ArrayList<>()).removeIf(uuid -> uuid.equals(packUniqueId));
             // Refreshing holograms once (possibly) all resource-packs are loaded.
             if (loadingResourcePacks.get(playerUniqueId) != null && loadingResourcePacks.get(playerUniqueId).isEmpty()) {
+                plugin.getLogger().info("[RP-DEBUG] [" + event.getPlayer().getName() + "] All packs has been loaded... Removing temp data... ");
                 // Removing player from the map, as they're no longer needed here.
                 loadingResourcePacks.remove(playerUniqueId);
+                plugin.getLogger().info("[RP-DEBUG] [" + event.getPlayer().getName() + "] Refreshing holograms...");
                 // Refreshing holograms as to make sure custom textures are loaded.
                 for (final Hologram hologram : this.plugin.getHologramsManager().getHolograms()) {
                     hologram.refreshHologram(event.getPlayer());
                 }
+                plugin.getLogger().info("[RP-DEBUG] [" + event.getPlayer().getName() + "] Refreshing holograms done!");
             }
         }
     }
